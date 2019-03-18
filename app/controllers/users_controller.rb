@@ -15,7 +15,6 @@ class UsersController < ApplicationController
 		@user = User.new(user_params)
 		if @user.save
 			@token = encode_token(user_id: @user.id)
-			# @user.tastes << Taste.first
 			render json: { user: @user, jwt: @token }, status: :created
 		else
 			render json: @user.errors.full_messages, status: :unprocessable_entity
