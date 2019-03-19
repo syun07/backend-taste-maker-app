@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   resources :favorites
 	resources :users
 		post '/login', to: 'auth#create'
+		
+		get '/searched-wavelength', to: 'tastes#fetch'
 end

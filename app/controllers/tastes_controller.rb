@@ -1,5 +1,19 @@
 class TastesController < ApplicationController
-	before_action :authorized, except: [:index, :create]
+	before_action :authorized, except: [:index, :create, :fetch]
+
+	def fetch
+
+		@query = request.headers['query']
+		@genre = request.headers['genre']
+		# byebug
+
+		@result = 
+		RestClient.get("https://tastedive.com/api/similar?k=332551-SchoolPr-UPIB7UJ8&info=1&q=#{@query}&type=#{@genre}")
+		
+		@api_data = JSON.parse(@result.body)
+
+		render json: @api_data
+	end
 
   def index
 		@tastes = Tastes.all
