@@ -5,10 +5,9 @@ class TastesController < ApplicationController
 
 		@query = request.headers['query']
 		@genre = request.headers['genre']
-		# byebug
 
 		@result = 
-		RestClient.get("https://tastedive.com/api/similar?k=332551-SchoolPr-UPIB7UJ8&info=1&q=#{@query}&type=#{@genre}")
+		RestClient.get("https://tastedive.com/api/similar?k=332551-SchoolPr-K9OLOPIS&info=1&q=#{@query}&type=#{@genre}")
 		
 		@api_data = JSON.parse(@result.body)
 
