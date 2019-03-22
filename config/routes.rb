@@ -5,4 +5,5 @@ Rails.application.routes.draw do
 		post '/login', to: 'auth#create'
 		
 		get '/searched-wavelength', to: 'tastes#fetch'
+		delete '/remove-wavelength', to: 'favorites#destroy'
 end

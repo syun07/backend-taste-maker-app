@@ -20,7 +20,7 @@ class TastesController < ApplicationController
 	end
 
 	def create
-		@taste = Taste.find_or_create_by!(name: tastes_params[:name], type: tastes_params[:type], teaser: tastes_params[:teaser], wUrl: tastes_params[:wUrl], yUrl: tastes_params[:yUrl], yID: tastes_params[:yID])
+		@taste = Taste.find_or_create_by!(name: tastes_params[:name], genre: tastes_params[:genre], teaser: tastes_params[:teaser], wUrl: tastes_params[:wUrl], yUrl: tastes_params[:yUrl], yID: tastes_params[:yID])
 		
 		if @taste.save
 			currentUser = User.find(tastes_params[:userID])
@@ -41,7 +41,7 @@ class TastesController < ApplicationController
 	private
 
 	def tastes_params
-		params.permit(:name, :type, :teaser, :wUrl, :yUrl, :yID, :userID)
+		params.permit(:name, :genre, :teaser, :wUrl, :yUrl, :yID, :userID)
 	end
 
 end

@@ -1,5 +1,5 @@
 class FavoritesController < ApplicationController
-	before_action :authorized, except: [:index, :create]
+	before_action :authorized, except: [:index, :create, :destroy]
 
 	def index
 		@favorites = Favorite.all
@@ -15,9 +15,19 @@ class FavoritesController < ApplicationController
 		end
 	end
 
+	def destroy 
+		currentUser = User.find(favorites_params[:user_id])
+		@favorite = currentUser.favorites.find_by(taste_id: favorites_params[:taste_id])
+			if @favorite.destroy
+			render json: @favorite, status: :created
+			else
+				render json: @favorite.errors.full_messages, status: :unprocessable_entity
+			end
+	 end
+
 	private
 
-	def favorite_params
+	def favorites_params
 		params.permit(:user_id, :taste_id)
 	end
 end
