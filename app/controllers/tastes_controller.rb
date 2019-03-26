@@ -1,10 +1,11 @@
 class TastesController < ApplicationController
-	before_action :authorized, except: [:index, :create, :show, :fetch]
+	before_action :authorized, except: [:index, :create, :show, :update, :fetch]
 
 	def fetch
 
 		@query = request.headers['query']
 		@genre = request.headers['genre']
+		@likes = request.headers['likes']
 
 		@result = 
 		RestClient.get("https://tastedive.com/api/similar?k=332551-SchoolPr-79XIOQEU&info=1&q=#{@query}&type=#{@genre}")
@@ -20,13 +21,13 @@ class TastesController < ApplicationController
 	end
 
 	def create
-		@taste = Taste.find_or_create_by!(name: tastes_params[:name], genre: tastes_params[:genre], teaser: tastes_params[:teaser], wUrl: tastes_params[:wUrl], yUrl: tastes_params[:yUrl], yID: tastes_params[:yID], likes: tastes_params[:likes])
+		@taste = Taste.find_or_create_by!(name: tastes_params[:name], genre: tastes_params[:genre], teaser: tastes_params[:teaser], wUrl: tastes_params[:wUrl], yUrl: tastes_params[:yUrl], yID: tastes_params[:yID])
 		
 		if @taste.save
 			currentUser = User.find(tastes_params[:userID])
 
 			if currentUser.tastes.any?{|taste| taste['name'] === @taste['name']}
-			render json: @taste, status: :ok
+				render json: @taste, status: :ok
 
 			else
 				@taste.users << currentUser
