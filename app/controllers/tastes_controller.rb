@@ -1,5 +1,5 @@
 class TastesController < ApplicationController
-	before_action :authorized, except: [:index, :create, :fetch]
+	before_action :authorized, except: [:index, :create, :show, :fetch]
 
 	def fetch
 
@@ -7,7 +7,7 @@ class TastesController < ApplicationController
 		@genre = request.headers['genre']
 
 		@result = 
-		RestClient.get("https://tastedive.com/api/similar?k=332551-SchoolPr-3QM2JZAF&info=1&q=#{@query}&type=#{@genre}")
+		RestClient.get("https://tastedive.com/api/similar?k=332551-SchoolPr-79XIOQEU&info=1&q=#{@query}&type=#{@genre}")
 		
 		@api_data = JSON.parse(@result.body)
 
@@ -20,7 +20,7 @@ class TastesController < ApplicationController
 	end
 
 	def create
-		@taste = Taste.find_or_create_by!(name: tastes_params[:name], genre: tastes_params[:genre], teaser: tastes_params[:teaser], wUrl: tastes_params[:wUrl], yUrl: tastes_params[:yUrl], yID: tastes_params[:yID])
+		@taste = Taste.find_or_create_by!(name: tastes_params[:name], genre: tastes_params[:genre], teaser: tastes_params[:teaser], wUrl: tastes_params[:wUrl], yUrl: tastes_params[:yUrl], yID: tastes_params[:yID], likes: tastes_params[:likes])
 		
 		if @taste.save
 			currentUser = User.find(tastes_params[:userID])
@@ -38,10 +38,21 @@ class TastesController < ApplicationController
 		end
 	end
 
+	def show
+		@taste = Taste.find(params[:id])
+		render json: @taste, status: :ok
+	end
+
+	def update
+		@taste = Taste.find(params[:id])
+		@taste.update(likes: tastes_params[:likes])
+		render json: @taste, status: :ok
+	end
+
 	private
 
 	def tastes_params
-		params.permit(:name, :genre, :teaser, :wUrl, :yUrl, :yID, :userID)
+		params.permit(:name, :genre, :teaser, :wUrl, :yUrl, :yID, :userID, :likes)
 	end
 
 end
