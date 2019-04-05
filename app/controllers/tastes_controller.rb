@@ -8,7 +8,7 @@ class TastesController < ApplicationController
 		@likes = request.headers['likes']
 
 		@result = 
-		RestClient.get("https://tastedive.com/api/similar?k=332551-SchoolPr-U3X5MKYW&info=1&q=#{@query}&type=#{@genre}")
+		RestClient.get("https://tastedive.com/api/similar?k=332551-SchoolPr-C1J9RIC5&info=1&q=#{@query}&type=#{@genre}")
 		
 		@api_data = JSON.parse(@result.body)
 
